@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 
 const userSchema = new mongoose.Schema({
@@ -52,6 +53,21 @@ const userSchema = new mongoose.Schema({
         maxLength: [20, 'Password should not exceed 20 characters'],
     },
 }, { timestamps: true });
+
+
+userSchema.pre('save', async function (next) { //next is a callback function
+    if (!this.isModified('password')) { //isModified is a mongoose method to check if the password is modified or not
+        next();
+    }
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(this.password, salt);
+        this.password = hashedPassword;
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 const User = mongoose.model('User', userSchema);
 

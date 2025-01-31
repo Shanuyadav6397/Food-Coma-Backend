@@ -5,28 +5,31 @@ import {
     productFindRepository
 } from '../repository/productRepository.js';
 import fs from 'fs';
+import { NotFoundError } from "../utils/notFoundError.js";
+import { BadRequestError } from "../utils/badRequestError.js";
+import { InternalServerError } from "../utils/internalServerError.js";
 
 async function productCreateService(productDetails) {
     try {
         const { productName, price, description } = productDetails;
 
         if (!productName) {
-            throw ({ message: 'Product name are required', statusCode: 400 });
+            throw new BadRequestError("Product name is required", 400);
         }
         if (!price) {
-            throw ({ message: 'Product price are required', statusCode: 400 });
+            throw new BadRequestError("Product price is required", 400);
         }
         if (!description) {
-            throw ({ message: 'Product description are required', statusCode: 400 });
+            throw new BadRequestError("Product description is required", 400);
         }
 
         const productImageLocalPath = productDetails.productImage;
         if (!productImageLocalPath) {
-            throw ({ message: 'Product image is required', statusCode: 400 });
+            throw new BadRequestError("Product image is required", 400);
         }
         const productImageFromCloudinary = await uploadImageOnCloudinary(productImageLocalPath);
         if (!productImageFromCloudinary) {
-            throw ({ message: 'Error in uploading image on cloudinary', statusCode: 500 });
+            throw new InternalServerError("Can't upload image to cloudinary", 500);
         }
 
         const product = await productCreateRepository({
@@ -35,7 +38,7 @@ async function productCreateService(productDetails) {
         });
 
         if (!product) {
-            throw ({ message: 'Error in creating product', statusCode: 500 });
+            throw new InternalServerError("Can't create product", 500);
         }
 
         return product;
@@ -47,22 +50,22 @@ async function productCreateService(productDetails) {
 
 async function productDeleteService(id) {
     if (!id) {
-        throw ({ message: 'Product id is required', statusCode: 400 });
+        throw new BadRequestError("Product id is required", 400);
     }
     const product = await productDeleteRepository(id);
     if (!product) {
-        throw ({ message: 'This product is not exist', statusCode: 500 });
+        throw new NotFoundError("Product not found", 404);
     }
     return product;
 }
 
 async function productFindService(id) {
     if (!id) {
-        throw ({ message: 'Product id is required', statusCode: 400 });
+        throw new BadRequestError("Product id is required", 400);
     }
     const product = await productFindRepository(id);
     if (!product) {
-        throw ({ message: 'Not abel to find the product', statusCode: 404 });
+        throw new NotFoundError("Product not found", 404);
     }
     return product;
 }

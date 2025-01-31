@@ -1,19 +1,19 @@
 import { userRegasterService } from "../service/userService.js";
+import { ApiError } from "../utils/apiError.js";
+import { ApiResponse } from "../utils/apiResponse.js";
 
 async function userRegasterController(req, res) {
     try {
         const newuser = await userRegasterService(req.body);
-        return res.status(201).json({
-            message: "User registered successfully",
-            data: newuser,
-            success: true,
-            error: {}
-        });
+        return res.status(201).json(new ApiResponse(201, "User created successfully", newuser, {}));
     } catch (error) {
+        console.log(error);
+        const apiError = new ApiError(error.statusCode || 500, error.message || "Can't create user", {}, error)
         return res.status(error.statusCode || 500).json({
-            message: error.message || "Internal server error",
+            message: apiError.message,
+            statusCode: apiError.statusCode,
+            error: apiError.error,
             success: false,
-            error: error || error.message
         });
 
     }

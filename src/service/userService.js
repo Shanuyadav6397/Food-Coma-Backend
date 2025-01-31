@@ -1,4 +1,6 @@
 import { createNewUser, findUser } from "../repository/userRepository.js";
+import { BadRequestError } from "../utils/badRequestError.js";
+import { InternalServerError } from "../utils/internalServerError.js";
 
 async function userRegasterService(userDetails) {
     if (
@@ -6,14 +8,14 @@ async function userRegasterService(userDetails) {
             (field) => field?.trim() === ""
         )
     ) {
-        throw { message: "All fileds are required", statusCode: 400 };
+        throw new BadRequestError("All fields are required", 400);
     };
 
     const existUser = await findUser({
         $or: [{ email: userDetails.email }, { mobileNumber: userDetails.mobileNumber }],
     });
     if (existUser) {
-        throw { message: "User already exists", statusCode: 400 };
+        throw new BadRequestError("User already exists", 400);
     }
 
     const newUser = await createNewUser({
@@ -25,7 +27,7 @@ async function userRegasterService(userDetails) {
     });
 
     if(!newUser) {
-        throw { message: "User registration failed", statusCode: 500 };
+        throw new InternalServerError("Can't create user", 500);
     };
 
     return newUser;

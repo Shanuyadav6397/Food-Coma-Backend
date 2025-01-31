@@ -1,5 +1,9 @@
 import { uploadImageOnCloudinary } from '../config/cloudinaryConfig.js';
-import { productCreateRepository } from '../repository/productRepository.js';
+import {
+    productCreateRepository,
+    productDeleteRepository,
+    productFindRepository
+} from '../repository/productRepository.js';
 import fs from 'fs';
 
 async function productCreateService(productDetails) {
@@ -41,5 +45,31 @@ async function productCreateService(productDetails) {
     }
 }
 
+async function productDeleteService(id) {
+    if (!id) {
+        throw ({ message: 'Product id is required', statusCode: 400 });
+    }
+    const product = await productDeleteRepository(id);
+    if (!product) {
+        throw ({ message: 'This product is not exist', statusCode: 500 });
+    }
+    return product;
+}
 
-export { productCreateService };
+async function productFindService(id) {
+    if (!id) {
+        throw ({ message: 'Product id is required', statusCode: 400 });
+    }
+    const product = await productFindRepository(id);
+    if (!product) {
+        throw ({ message: 'Not abel to find the product', statusCode: 404 });
+    }
+    return product;
+}
+
+
+export {
+    productCreateService,
+    productDeleteService,
+    productFindService
+};

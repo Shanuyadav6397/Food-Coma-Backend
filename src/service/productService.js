@@ -10,42 +10,38 @@ import { BadRequestError } from "../utils/badRequestError.js";
 import { InternalServerError } from "../utils/internalServerError.js";
 
 async function productCreateService(productDetails) {
-    try {
-        const { productName, price, description } = productDetails;
 
-        if (!productName) {
-            throw new BadRequestError("Product name is required", 400);
-        }
-        if (!price) {
-            throw new BadRequestError("Product price is required", 400);
-        }
-        if (!description) {
-            throw new BadRequestError("Product description is required", 400);
-        }
+    const { productName, price, description } = productDetails;
 
-        const productImageLocalPath = productDetails.productImage;
-        if (!productImageLocalPath) {
-            throw new BadRequestError("Product image is required", 400);
-        }
-        const productImageFromCloudinary = await uploadImageOnCloudinary(productImageLocalPath);
-        if (!productImageFromCloudinary) {
-            throw new InternalServerError("Can't upload image to cloudinary", 500);
-        }
-
-        const product = await productCreateRepository({
-            ...productDetails,
-            productImage: productImageFromCloudinary.url
-        });
-
-        if (!product) {
-            throw new InternalServerError("Can't create product", 500);
-        }
-
-        return product;
-    } catch (error) {
-        fs.unlinkSync(productDetails.productImage);
-        console.log(error);
+    if (!productName) {
+        throw new BadRequestError("Product name is required", 400);
     }
+    if (!price) {
+        throw new BadRequestError("Product price is required", 400);
+    }
+    if (!description) {
+        throw new BadRequestError("Product description is required", 400);
+    }
+
+    const productImageLocalPath = productDetails.productImage;
+    if (!productImageLocalPath) {
+        throw new BadRequestError("Product image is required", 400);
+    }
+    const productImageFromCloudinary = await uploadImageOnCloudinary(productImageLocalPath);
+    if (!productImageFromCloudinary) {
+        throw new InternalServerError("Can't upload image to cloudinary", 500);
+    }
+
+    const product = await productCreateRepository({
+        ...productDetails,
+        productImage: productImageFromCloudinary.url
+    });
+
+    if (!product) {
+        throw new InternalServerError("Can't create product", 500);
+    }
+
+    return product;
 }
 
 async function productDeleteService(id) {

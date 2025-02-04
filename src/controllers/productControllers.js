@@ -13,6 +13,7 @@ async function productCreateController(req, res) {
         description: req.body.description,
         category: req.body.category,
         inStock: req.body.inStock,
+        quantity: req.body.quantity,
         productImage: req.file?.path // This is the path where the image is stored
     }
     console.log(productDetails);

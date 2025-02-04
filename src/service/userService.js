@@ -1,3 +1,4 @@
+import { createNewCart } from "../repository/cartRepository.js";
 import { createNewUser, findUser } from "../repository/userRepository.js";
 import { BadRequestError } from "../utils/badRequestError.js";
 import { InternalServerError } from "../utils/internalServerError.js";
@@ -24,11 +25,14 @@ async function userRegasterService(userDetails) {
         password: userDetails.password,
         firstName: userDetails.firstName,
         lastName: userDetails.lastName,
+        role: userDetails.role,
     });
 
     if(!newUser) {
-        throw new InternalServerError("Can't create user", 500);
+        throw new InternalServerError("Can't create user");
     };
+
+    await createNewCart(newUser._id);
 
     return newUser;
 }

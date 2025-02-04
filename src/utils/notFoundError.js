@@ -2,7 +2,7 @@ import AppError from "./appError.js";
 
 class NotFoundError extends AppError {
     constructor(resource) {
-        super(`Not found the ${resource}`, 404);
+        super(`Not abel to find the ${resource}`, 404);
     }
 }
 

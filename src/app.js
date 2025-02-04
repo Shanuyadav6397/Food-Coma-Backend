@@ -13,10 +13,12 @@ app.use(cookieParser()); // middleware to parse cookies
 // import routes
 import { userRouter } from './routes/userRoutes.js';
 import { authRouter } from './routes/authRoutes.js';
-import { productRouter } from './routes/productRoute.js';
+import { productRouter } from './routes/productRoutes.js';
+import { cartRouter } from './routes/cartRoutes.js';
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/product', productRouter);
+app.use('/api/v1/cart', cartRouter);
 
 app.listen(PORT, async () => {
     await connectDB();

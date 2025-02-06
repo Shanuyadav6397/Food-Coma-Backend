@@ -24,4 +24,18 @@ async function userLoginController(req, res) {
     }
 }
 
-export { userLoginController };
+async function logout(req, res) {
+    const options = {
+        httpOnly: true,
+        secure: true,
+    };
+    return res.status(200)
+        .clearCookie("authToken", options)
+        .json(new ApiResponse(200, "Log out successfull", {}, {}));
+
+}
+
+export {
+    userLoginController,
+    logout
+};

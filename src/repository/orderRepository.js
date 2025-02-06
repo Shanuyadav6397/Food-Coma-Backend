@@ -40,7 +40,7 @@ async function getOrdersByUserId(userId) {
     }
 }
 
-async function getOrderByOrderId(orderId){
+async function getOrderByOrderId(orderId) {
     try {
         const order = await Order.findById(orderId);
         return order;
@@ -49,9 +49,9 @@ async function getOrderByOrderId(orderId){
     }
 }
 
-async function UpdateOrderByOrderId(orderId, status){
+async function UpdateOrderByOrderId(orderId, status) {
     try {
-        const order = await Order.findByIdAndUpdate(orderId, {status: status}, {new: true});
+        const order = await Order.findByIdAndUpdate(orderId, { status: status }, { new: true });
         await order.save();
         return order;
     }

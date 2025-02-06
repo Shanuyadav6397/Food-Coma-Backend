@@ -37,7 +37,7 @@ async function addAndRemoveProductToUserCartService(userId, productId, shouldAdd
     const quantityValue = (shouldAdd == true) ? 1 : -1;
     let foundProduct = false;
     const productIndex = userCart.items.findIndex(item => {
-        if (item.productId._id.toString() === productId) {
+        if (item.product._id.toString() === productId) {
             if (shouldAdd) {
                 if (product.quantity >= item.quantity + 1) {
                     item.quantity += quantityValue;
@@ -60,7 +60,7 @@ async function addAndRemoveProductToUserCartService(userId, productId, shouldAdd
     if (!foundProduct) {
         if (shouldAdd) {
             userCart.items.push({
-                productId: productId,
+                product: productId,
                 quantity: 1
             });
         } else {
@@ -80,6 +80,9 @@ async function clearCartAllItemsService(userId) {
     const cart = await clearCartAllItemsRepo(userId);
     if (!cart) {
         throw new NotFoundError("Cart");
+    };
+    if (cart.items.length === 0) {
+        throw new BadRequestError("Cart is already empty", 404);
     };
     return cart;
 }

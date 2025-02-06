@@ -57,6 +57,13 @@ const userSchema = new mongoose.Schema({
         enum: ['USER', 'ADMIN'],
         default: 'USER',
     },
+    address: {
+        type: String,
+        required: [true, 'Address is required'],
+        trim: true,
+        minLength: [10, 'Address should be at least 10 characters long'],
+        maxLength: [100, 'Address should not exceed 100 characters'],
+    },
 }, { timestamps: true });
 
 

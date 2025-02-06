@@ -11,7 +11,7 @@ async function createNewCart(userId) {
 
 async function findUserCartRepo(userId) {
     try {
-        const cart = await Cart.findOne({ user: userId }).populate("items.productId");
+        const cart = await Cart.findOne({ user: userId }).populate("items.product");
         return cart;
     } catch (error) {
         console.log(error);

@@ -2,7 +2,10 @@ import { clearCartAllItemsRepo } from "../repository/cartRepository.js";
 import {
     createNewOrderRepo,
     findUserById,
-    getCartByUserId
+    getCartByUserId,
+    getOrderByOrderId,
+    getOrdersByUserId,
+    UpdateOrderByOrderId
 } from "../repository/orderRepository.js";
 import { BadRequestError } from "../utils/badRequestError.js";
 import { InternalServerError } from "../utils/internalServerError.js";
@@ -26,12 +29,7 @@ async function createNewOrderService(userId, paymentMethod) {
 
     const orderObject = {};
     orderObject.user = cart.user;
-    orderObject.items = cart.items.map(cartItem => {
-        return {
-            product: cartItem.product.id,
-            quantity: cartItem.quantity
-        }
-    });
+    orderObject.items = cart.items;
     orderObject.status = "ORDERED";
     orderObject.totalAmount = 0;
     cart.items.forEach((cartItem) => {
@@ -50,4 +48,72 @@ async function createNewOrderService(userId, paymentMethod) {
     return order;
 }
 
-export { createNewOrderService };
+async function getOrdersByUserIdService(userId) {
+    if (!userId) {
+        throw new BadRequestError("User Id");
+    }
+
+    const orders = await getOrdersByUserId(userId);
+    if (!orders) {
+        throw new NotFoundError("Orders");
+    }
+    return orders;
+}
+
+async function getOrderByOrderIdService(orderId) {
+    if (!orderId) {
+        throw new BadRequestError("Order Id");
+    }
+
+    const order = await getOrderByOrderId(orderId);
+    if (!order) {
+        throw new NotFoundError("Order");
+    }
+    return order;
+}
+
+async function updateOrderStatusService(orderId, status) {
+    if (!orderId) {
+        throw new BadRequestError("Order Id");
+    }
+
+    if (!status) {
+        throw new BadRequestError("Status");
+    }
+
+    const order = await getOrderByOrderId(orderId);
+    if (!order) {
+        throw new NotFoundError("Order");
+    }
+
+    const updatedOrder = await UpdateOrderByOrderId(orderId, status);
+    if (!updatedOrder) {
+        throw new InternalServerError("Order");
+    }
+    return updatedOrder;
+}
+
+async function cancleOrderStatusService(orderId, status) {
+    if (!orderId) {
+        throw new BadRequestError("Order Id");
+    }
+
+    const order = await getOrderByOrderId(orderId);
+    if (!order) {
+        throw new NotFoundError("Order");
+    }
+    console.log(status);
+    const updatedOrder = await UpdateOrderByOrderId(orderId, status);
+    if (!updatedOrder) {
+        throw new InternalServerError("Order");
+    }
+    return updatedOrder;
+}
+
+export {
+    createNewOrderService,
+    getOrdersByUserIdService,
+    getOrderByOrderIdService,
+    updateOrderStatusService,
+    cancleOrderStatusService
+};

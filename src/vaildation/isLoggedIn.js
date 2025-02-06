@@ -45,6 +45,7 @@ async function isLoggedIn(req, res, next) {
 
 async function isAdmin(req, res, next) {
     const loggedInUser =  req.user;
+    console.log(loggedInUser);
     if (loggedInUser.role === "ADMIN") {
         next();
     } else {

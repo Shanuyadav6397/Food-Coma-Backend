@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+    allProductFindController,
     productCreateController,
     productDeleteController,
     productFindController
@@ -13,5 +14,6 @@ const productRouter = Router();
 productRouter.route("/create", isLoggedIn, isAdmin).post(isLoggedIn, isAdmin, uploader.single('productImage'), productCreateController);
 productRouter.route("/:id").get(productFindController);
 productRouter.route("/:id").delete(productDeleteController);
+productRouter.route("/").get(allProductFindController);
 
 export { productRouter };

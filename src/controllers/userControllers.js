@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/apiResponse.js";
 async function userRegasterController(req, res) {
     try {
         const newuser = await userRegasterService(req.body);
-        return res.status(201).json(new ApiResponse(201, "User created successfully", newuser, {}));
+        return res.status(201).json(new ApiResponse(201, "User registered successfully", newuser, {}));
     } catch (error) {
         console.log(error);
         const apiError = new ApiError(error.statusCode || 500, error.message || "Can't create user", {}, error)

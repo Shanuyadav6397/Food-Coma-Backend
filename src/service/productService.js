@@ -1,5 +1,6 @@
 import { uploadImageOnCloudinary } from '../config/cloudinaryConfig.js';
 import {
+    allProductFindRepository,
     productCreateRepository,
     productDeleteRepository,
     productFindRepository
@@ -66,9 +67,18 @@ async function productFindService(id) {
     return product;
 }
 
+async function allProductFindService() {
+    const product = await allProductFindRepository();
+    if (!product) {
+        throw new NotFoundError("Product not found", 404);
+    }
+    return product;
+}
+
 
 export {
     productCreateService,
     productDeleteService,
-    productFindService
+    productFindService,
+    allProductFindService
 };

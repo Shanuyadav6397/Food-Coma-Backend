@@ -1,4 +1,5 @@
 import {
+    allProductFindService,
     productCreateService,
     productDeleteService,
     productFindService
@@ -67,9 +68,26 @@ async function productFindController(req, res) {
     }
 }
 
+async function allProductFindController(req, res) {
+    try {
+        const product = await allProductFindService();
+        res.status(200).json(new ApiResponse(200, 'All Product found successfully', product, null));
+    } catch (error) {
+        console.log(error);
+        const apiError = new ApiError(error.statusCode || 500, error.message || "Can't find product", {}, error);
+        res.status(error.statusCode || 500).json({
+            message: apiError.message,
+            statusCode: apiError.statusCode,
+            error: apiError.error,
+            success: false,
+        });
+    }
+}
+
 
 export {
     productCreateController,
     productDeleteController,
-    productFindController
+    productFindController,
+    allProductFindController
 };

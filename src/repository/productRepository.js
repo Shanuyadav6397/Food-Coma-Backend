@@ -3,8 +3,8 @@ import { InternalServerError } from '../utils/internalServerError.js';
 
 async function productCreateRepository(productDetails) {
     try {
-        const response = await Product.create({...productDetails});
-        return response;
+        const product = await Product.create({...productDetails});
+        return product;
     } catch (error) {
         if (error.name === 'MongooseError') {
             new InternalServerError(error.message, 'productRepository');
@@ -16,8 +16,8 @@ async function productCreateRepository(productDetails) {
 
 async function productDeleteRepository(id) {
     try {
-        const response = await Product.findByIdAndDelete(id);
-        return response;
+        const product = await Product.findByIdAndDelete(id);
+        return product;
     } catch (error) {
         console.log(error);
     }
@@ -25,9 +25,20 @@ async function productDeleteRepository(id) {
 
 async function productFindRepository(id) {
     try {
-        const response = await Product.findById(id);
-        console.log(response);
-        return response;
+        const product = await Product.findById(id);
+        console.log(product);
+        return product;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function allProductFindRepository() {
+    try {
+        const products = await Product.find();
+        console.log(products);
+        return products;
     }
     catch (error) {
         console.log(error);
@@ -38,5 +49,6 @@ async function productFindRepository(id) {
 export {
     productCreateRepository,
     productDeleteRepository,
-    productFindRepository
+    productFindRepository,
+    allProductFindRepository
 };

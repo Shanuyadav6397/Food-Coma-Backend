@@ -5,7 +5,7 @@ import { isLoggedIn } from '../vaildation/isLoggedIn.js';
 const authRouter = express.Router();
 
 authRouter.route('/login').post(userLoginController);
-authRouter.route("/logout").post(isLoggedIn, logout);
+authRouter.route("/logout").post(logout);
 
 
 export { authRouter };

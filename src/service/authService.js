@@ -35,7 +35,10 @@ async function userLoginService(loginPayload) {
         throw new InternalServerError("Can't create login token", 500);
     }
 
-    return loginToken;
+    return {loginToken, userRole, userData:{
+        firstName: user.firstName,
+        email: user.email,
+    }};
 
 }
 

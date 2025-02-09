@@ -2,9 +2,15 @@ import express from 'express';
 import { PORT } from './config/serverConfig.js';
 import connectDB from './config/dbConfig.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express();
 
+app.use(cors({
+    origin: 'http://localhost:5173', // to allow requests from the client
+    credentials: true // to allow cookies from the client
+    })); 
+    // // middleware to allow cross-origin requests
 app.use(express.json({ limit: "16kb" })); // middleware to parse JSON data
 app.use(express.urlencoded({ extended: true })); // middleware to parse URL encoded data
 app.use(express.text()); // middleware to parse text data

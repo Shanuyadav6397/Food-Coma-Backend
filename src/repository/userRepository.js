@@ -1,4 +1,6 @@
 import User from "../schema/userSchema.js";
+import { BadRequestError } from "../utils/badRequestError.js";
+import { InternalServerError } from "../utils/internalServerError.js";
 
 async function findUser(user) {
     try {
@@ -14,7 +16,15 @@ async function createNewUser(userDetails) {
         const response = await User.create({ ...userDetails });
         return response;
     } catch (error) {
-        console.log(error);
+        if (error.name === 'ValidationError') {
+
+            const errorMessageList = Object.keys(error.errors).map((property) => {
+                return error.errors[property].message;
+            });
+            console.log(errorMessageList)
+            throw new BadRequestError(errorMessageList);
+        }
+        throw new InternalServerError();
     }
 }
 

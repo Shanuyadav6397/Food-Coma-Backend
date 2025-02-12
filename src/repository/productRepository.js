@@ -37,7 +37,6 @@ async function productFindRepository(id) {
 async function allProductFindRepository() {
     try {
         const products = await Product.find();
-        console.log(products);
         return products;
     }
     catch (error) {

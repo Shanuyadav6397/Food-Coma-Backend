@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { JSON_WEB_TOKEN_SECRET } from "../config/serverConfig.js";
 import { ApiError } from "../utils/apiError.js";
 import { UnAuthorisedError } from "../utils/unAuthorizsedError.js";
+import { ApiResponse } from "../utils/apiResponse.js";
 
 async function isLoggedIn(req, res, next) {
     const token = req.cookies.authToken;
@@ -17,6 +18,7 @@ async function isLoggedIn(req, res, next) {
 
     try {
         const tokenVerify = jwt.verify(token, JSON_WEB_TOKEN_SECRET);
+        console.log(tokenVerify);
         const error = new UnAuthorisedError("Token not verified");
         if (!tokenVerify) {
             return res.status(401).json({
@@ -32,6 +34,16 @@ async function isLoggedIn(req, res, next) {
         };
         next();
     } catch (error) {
+        console.log(error.name);
+        if (error.name === "TokenExpiredError") {
+            const options = {
+                httpOnly: true,
+                secure: true,
+            };
+            return res.status(200)
+                .clearCookie("authToken", options)
+                .json(new ApiResponse(200, "Log out successfull", {}, {}));
+        };
         const apiError = new ApiError(401, "Token not verified", [], "Not authenticated");
         return res.status(401).json({
             message: apiError.message,
@@ -44,7 +56,7 @@ async function isLoggedIn(req, res, next) {
 }
 
 async function isAdmin(req, res, next) {
-    const loggedInUser =  req.user;
+    const loggedInUser = req.user;
     console.log(loggedInUser);
     if (loggedInUser.role === "ADMIN") {
         next();

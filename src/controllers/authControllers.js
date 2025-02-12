@@ -7,7 +7,7 @@ async function userLoginController(req, res) {
         const loginPayload = req.body;
         const response = await userLoginService(loginPayload);
         res.cookie("authToken", response.loginToken, {
-            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: false //process.env.NODE_ENV === "production" ? true : false
         })

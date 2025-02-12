@@ -29,7 +29,12 @@ async function addAndRemoveProductToUserCartController(req, res) {
         const productId = req.params.productId;
         const operation = req.params.operation === "add" ? true : false;
         const userCart = await addAndRemoveProductToUserCartService(userId, productId, operation);
-        res.status(200).json(new ApiResponse(200, "Product added to cart successfully", userCart, null));
+        if(operation == true){
+            return res.status(200).json(new ApiResponse(200, "Product added to cart successfully", userCart, null));
+        }else if(operation == false){
+            return res.status(200).json(new ApiResponse(200, "Product removed successfully ", userCart, null));
+        }
+        return res.status(400).json(new ApiResponse(400, "Invalid operation", userCart, null));
     } catch (error) {
         const apiError = new ApiError(error.statusCode || 500, error.message || "Can't add product to cart", {}, error);
         console.log(error);

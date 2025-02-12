@@ -21,16 +21,20 @@ async function addAndRemoveProductToUserCartService(userId, productId, shouldAdd
     if (!productId) {
         throw new BadRequestError("Product ID is required");
     };
+
     const userCart = await findUserCartRepo(userId);
     if (!userCart) {
         throw new NotFoundError("Cart");
     };
+
     const product = await productFindRepository(productId);
     if (!product) {
         throw new NotFoundError("product");
     };
+
     const inStock = product.inStock;
     const quantity = product.quantity;
+    console.log(productId);
     if (quantity < 1 && inStock === false) {
         throw new BadRequestError("This product is out of stock", 409);
     };
@@ -45,10 +49,13 @@ async function addAndRemoveProductToUserCartService(userId, productId, shouldAdd
                     throw new BadRequestError("The quantity of the item requested is not available", 409);
                 };
             } else {
-                if (item.quantity > 1) {
+                if (item.quantity > 0) {
                     item.quantity += quantityValue;
-                } else if (item.quantity == 1) {
-                    userCart.items = userCart.items.filter(item => item.productId._id.toString() !== productId);
+                    if (item.quantity == 0) {
+                        userCart.items = userCart.items.filter(item => item.product._id != productId);
+                        foundProduct = true;
+                        return;
+                    };
                 }
                 else {
                     throw new NotFoundError("Product quantity is already 0", 404);

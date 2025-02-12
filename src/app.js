@@ -1,5 +1,5 @@
 import express from 'express';
-import { PORT } from './config/serverConfig.js';
+import { FRONTEND_URL, PORT } from './config/serverConfig.js';
 import connectDB from './config/dbConfig.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -7,7 +7,7 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors({
-    origin: 'https://food-coma-frontend-97oz-shanu-yadavs-projects.vercel.app/', // to allow requests from the client
+    origin: FRONTEND_URL, // to allow requests from the client
     credentials: true // to allow cookies from the client
     })); 
     // // middleware to allow cross-origin requests

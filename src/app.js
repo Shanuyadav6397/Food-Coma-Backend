@@ -7,7 +7,7 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173', // to allow requests from the client
+    origin: 'https://food-coma-frontend-97oz-shanu-yadavs-projects.vercel.app/', // to allow requests from the client
     credentials: true // to allow cookies from the client
     })); 
     // // middleware to allow cross-origin requests

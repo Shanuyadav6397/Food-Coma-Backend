@@ -7,7 +7,8 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors({
-    origin: FRONTEND_URL, // to allow requests from the client
+    origin: FRONTEND_URL, // to allow requests from the frontend server
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // to allow these http methods
     credentials: true // to allow cookies from the client
     })); 
     // // middleware to allow cross-origin requests

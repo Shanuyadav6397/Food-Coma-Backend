@@ -26,7 +26,6 @@ async function userLoginController(req, res) {
 }
 
 async function logout(req, res) {
-    console.log("Cookie form fronend", req.cookies);
     const options = {
         httpOnly: true,
         secure: true,

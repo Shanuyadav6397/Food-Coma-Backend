@@ -26,7 +26,6 @@ async function productDeleteRepository(id) {
 async function productFindRepository(id) {
     try {
         const product = await Product.findById(id);
-        console.log(product);
         return product;
     }
     catch (error) {

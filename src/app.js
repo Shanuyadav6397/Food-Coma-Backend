@@ -10,8 +10,9 @@ app.use(cors({
     origin: FRONTEND_URL, // to allow requests from the frontend server
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // to allow these http methods
     credentials: true // to allow cookies from the client
-    })); 
-    // // middleware to allow cross-origin requests
+}));
+
+// middleware to allow cross-origin requests
 app.use(express.json({ limit: "16kb" })); // middleware to parse JSON data
 app.use(express.urlencoded({ extended: true })); // middleware to parse URL encoded data
 app.use(express.text()); // middleware to parse text data

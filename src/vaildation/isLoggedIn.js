@@ -18,7 +18,6 @@ async function isLoggedIn(req, res, next) {
 
     try {
         const tokenVerify = jwt.verify(token, JSON_WEB_TOKEN_SECRET);
-        console.log(tokenVerify);
         const error = new UnAuthorisedError("Token not verified");
         if (!tokenVerify) {
             return res.status(401).json({
@@ -57,7 +56,6 @@ async function isLoggedIn(req, res, next) {
 
 async function isAdmin(req, res, next) {
     const loggedInUser = req.user;
-    console.log(loggedInUser);
     if (loggedInUser.role === "ADMIN") {
         next();
     } else {

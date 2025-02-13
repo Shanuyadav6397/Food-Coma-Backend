@@ -13,7 +13,6 @@ import { NotFoundError } from "../utils/notFoundError.js";
 
 async function createNewOrderService(userId, paymentMethod) {
     const cart = await getCartByUserId(userId);
-    // console.log(cart);
     if (!cart) {
         throw new NotFoundError("Cart");
     };

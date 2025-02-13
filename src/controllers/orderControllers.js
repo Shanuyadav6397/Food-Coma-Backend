@@ -29,7 +29,6 @@ async function createNewOrderController(req, res) {
 async function getOrdersByUserIdController(req, res) {
     try {
         const userId = req.user._id;
-        console.log(userId);
         const orders = await getOrdersByUserIdService(userId);
         return res.status(200).json(new ApiResponse(200, "Orders fetched successfully", orders, null));
     } catch (error) {

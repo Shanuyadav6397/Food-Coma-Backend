@@ -5,7 +5,6 @@ import {
     productDeleteRepository,
     productFindRepository
 } from '../repository/productRepository.js';
-import fs from 'fs';
 import { NotFoundError } from "../utils/notFoundError.js";
 import { BadRequestError } from "../utils/badRequestError.js";
 import { InternalServerError } from "../utils/internalServerError.js";

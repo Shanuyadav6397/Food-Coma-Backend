@@ -34,7 +34,6 @@ async function addAndRemoveProductToUserCartService(userId, productId, shouldAdd
 
     const inStock = product.inStock;
     const quantity = product.quantity;
-    console.log(productId);
     if (quantity < 1 && inStock === false) {
         throw new BadRequestError("This product is out of stock", 409);
     };

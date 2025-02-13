@@ -1,4 +1,4 @@
-import { findUserByEmailorUserName } from "../repository/authRepository.js";
+import { chnageUserPassword, findUserByEmail, findUserByEmailorUserName } from "../repository/authRepository.js";
 import { JSON_WEB_TOKEN_EXPIRES_IN, JSON_WEB_TOKEN_SECRET } from "../config/serverConfig.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -42,5 +42,41 @@ async function userLoginService(loginPayload) {
 
 }
 
+async function userPasswordResetService(resetPayload) {
+    const { email, oldPassword, newPassword, confirmPassword } = resetPayload;
 
-export { userLoginService };
+    // Check if the user Registered with given email
+    const user = await findUserByEmail(email);
+    if (!user) {
+        throw new NotFoundError("User not found, please register first", 404);
+    }
+
+    if (newPassword !== confirmPassword) {
+        throw new BadRequestError("Password and confirm password doesn't match", 400);
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(newPassword, user.password);
+    if (isPasswordCorrect) {
+        throw new BadRequestError("New password can't be same as old password", 400);
+    }
+
+
+    //  If the user is registered, check the password with the stored password
+    const hashedPassword = await bcrypt.hash(oldPassword, 10);
+    if (!hashedPassword) {
+        throw new InternalServerError("Can't hash password", 500);
+    }
+
+    const updatedUser = await chnageUserPassword(user, hashedPassword);
+    if (!updatedUser) {
+        throw new InternalServerError("Can't update password", 500);
+    }
+
+    return updatedUser;
+}
+
+
+export {
+    userLoginService,
+    userPasswordResetService
+};

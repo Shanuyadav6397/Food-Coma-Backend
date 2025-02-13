@@ -9,9 +9,9 @@ async function userLoginController(req, res) {
         res.cookie("authToken", response.loginToken, {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            secure: false, //process.env.NODE_ENV === "production" ? true : false
+            secure: true, //process.env.NODE_ENV === "production" ? true : false
             sameSite: "none"
-        })
+        });
         return res.status(200).json(new ApiResponse(200, "User logged in successfully", { data: { userRole: response.userRole, userData: response.userData } }, {}));
     } catch (error) {
         console.log(error);

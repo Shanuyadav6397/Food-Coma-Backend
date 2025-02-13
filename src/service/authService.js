@@ -1,4 +1,8 @@
-import { chnageUserPassword, findUserByEmail, findUserByEmailorUserName } from "../repository/authRepository.js";
+import {
+    chnageUserPassword,
+    findUserByEmail,
+    findUserByEmailorUserName
+} from "../repository/authRepository.js";
 import { JSON_WEB_TOKEN_EXPIRES_IN, JSON_WEB_TOKEN_SECRET } from "../config/serverConfig.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

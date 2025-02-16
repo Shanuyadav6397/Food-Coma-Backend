@@ -11,18 +11,20 @@ async function findUserByEmailorUserName(user) {
 
 async function findUserByEmail(email) {
     try {
-        const response = await User.findOne({ email: email });
-        return response;
+        const user = await User.findOne({ email: email });
+        return user;
     }
     catch (error) {
         console.log(error);
     }
 }
 
-async function chnageUserPassword(user, hashedPassword) {
+async function chnageUserPassword(user, newPassword) {
     try {
-        const response = await user.updateOne({ password: hashedPassword });
-        return response;
+        user.password = newPassword;
+        await user.save({ validateBeforeSave: false });
+        const changedPassword = await User.findById(user._id).select('-password -__v');
+        return changedPassword;
     }
     catch (error) {
         console.log(error);

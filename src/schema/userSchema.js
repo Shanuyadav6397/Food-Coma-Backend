@@ -50,16 +50,26 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password is required'],
         trim: true,
         minLength: [6, 'Password should be at least 6 characters long'],
-        maxLength: [20, 'Password should not exceed 20 characters'],
+        //maxLength: [20, 'Password should not exceed 20 characters'],
     },
     role: {
         type: String,
         enum: ['USER', 'ADMIN'],
         default: 'USER',
     },
+    otp: {
+        type: String,
+    },
+    otpExpiry: {
+        type: Date,
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
     address: {
         type: String,
-       // required: [true, 'Address is required'],
+        // required: [true, 'Address is required'],
         trim: true,
         minLength: [10, 'Address should be at least 10 characters long'],
         maxLength: [100, 'Address should not exceed 100 characters'],

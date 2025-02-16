@@ -24,11 +24,13 @@ import { authRouter } from './routes/authRoutes.js';
 import { productRouter } from './routes/productRoutes.js';
 import { cartRouter } from './routes/cartRoutes.js';
 import { orderRouter } from './routes/orderRoutes.js';
+
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/order', orderRouter);
+
 
 app.listen(PORT, async () => {
     await connectDB();

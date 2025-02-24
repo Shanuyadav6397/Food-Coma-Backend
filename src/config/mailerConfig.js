@@ -4,6 +4,7 @@ import { EMAIL_USER, EMAIL_PASSWORD } from "../config/serverConfig.js";
 // Create a transporter using your email service credentials
 const transporter = nodemailer.createTransport({
     service: "gmail", // change if using another email service
+    secure: false,
     auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASSWORD,
@@ -26,10 +27,22 @@ const sendMail = async (to, subject, text, html) => {
     // Actually send the email
     try {
         const info = await transporter.sendMail(mailOptions);
+        console.log("Email info", info);
         console.log("Email sent:", info.response);
     } catch (error) {
-        console.error("Error sending email:", error);
-        throw error;
+        if (error.code === 'EENVELOPE') {
+            return {
+                success: false,
+                error: 'Invalid email address format'
+            };
+        } else if (error.code === 'ECONNECTION') {
+
+        } else {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
     }
 };
 

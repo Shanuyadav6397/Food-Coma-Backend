@@ -43,5 +43,5 @@ export {
     createNewCart,
     findUserCartRepo,
     fetchUserCartByCartIdRepo,
-    clearCartAllItemsRepo
+    clearCartAllItemsRepo,
 };

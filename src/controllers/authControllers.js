@@ -1,4 +1,9 @@
-import { userLoginService, userPasswordResetService } from "../service/authService.js";
+import {
+    otpVerifyAndChangePasswordService,
+    passwordResetUsingEmailService,
+    userLoginService,
+    userPasswordResetService
+} from "../service/authService.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 
@@ -53,8 +58,45 @@ async function userPasswordResetController(req, res) {
     }
 }
 
+
+async function passwordResetUsingEmailController(req, res) {
+    try {
+        const email = req.body.email;
+        const response = await passwordResetUsingEmailService(email);
+        return res.status(200).json(new ApiResponse(200, "OTP sent successfully to the register email", { data: response }, {}));
+    } catch (error) {
+        console.log(error);
+        const apiError = new ApiError(error.statusCode || 500, error.message || "Can't sent OTP", {}, error)
+        return res.status(error.statusCode || 500).json({
+            message: apiError.message,
+            statusCode: apiError.statusCode,
+            error: apiError.error,
+            success: false,
+        });
+    }
+}
+
+async function otpVerifyAndChangePasswordController(req, res) {
+    try {
+        const userDetails = req.body;
+        const response = await otpVerifyAndChangePasswordService(userDetails);
+        return res.status(200).json(new ApiResponse(200, "Password Changed Successfully", { data: response }, {}));
+    } catch (error) {
+        console.log(error);
+        const apiError = new ApiError(error.statusCode || 500, error.message || "Can't reset password", {}, error)
+        return res.status(error.statusCode || 500).json({
+            message: apiError.message,
+            statusCode: apiError.statusCode,
+            error: apiError.error,
+            success: false,
+        });
+    }
+}
+
 export {
     userLoginController,
     logout,
-    userPasswordResetController
+    userPasswordResetController,
+    passwordResetUsingEmailController,
+    otpVerifyAndChangePasswordController
 };

@@ -6,7 +6,7 @@ class BadRequestError extends AppError {
             invalidParms = [String(invalidParms)];
         }
 
-        const message = `The request has the following invalid parameters:${invalidParms}`;
+        const message = `${invalidParms}`;
         super(message, statusCode);
     }
 }

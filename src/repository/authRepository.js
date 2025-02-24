@@ -19,9 +19,13 @@ async function findUserByEmail(email) {
     }
 }
 
-async function chnageUserPassword(user, newPassword) {
+async function chnageUserPassword(user, newPassword, flag) {
     try {
         user.password = newPassword;
+        if (flag == 1) {
+            user.otp = '';
+            user.otpExpiry = '';
+        }
         await user.save({ validateBeforeSave: false });
         const changedPassword = await User.findById(user._id).select('-password -__v');
         return changedPassword;
@@ -31,9 +35,21 @@ async function chnageUserPassword(user, newPassword) {
     }
 }
 
+async function changeUserDetails(user, OTP, otpExpiry) {
+    try {
+        user.otp = OTP;
+        user.otpExpiry = otpExpiry;
+        await user.save({ validateBeforeSave: false });
+        return user;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 export {
     findUserByEmailorUserName,
     findUserByEmail,
-    chnageUserPassword
+    chnageUserPassword,
+    changeUserDetails
 };
